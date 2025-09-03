@@ -1,0 +1,64 @@
+﻿@if(_TestActivo != null)
+{
+    <ShowOne Test="_TestActivo" OnRespuestaSeleccionada="ShowOne_OnRespuestaSeleccionada">
+    </ShowOne>
+}
+else
+{
+    <div>Fin ......</div>
+}
+
+@code {
+    //Figuras de ejmeplo:
+    //https://www.123test.com/iq-test/#culture-fair-intelligence-test
+
+    [Parameter]
+    [EditorRequired]
+    public Evaluacion Evaluacion { set; get; }
+
+    /// <summary>
+    /// Evento que se dispara al finalizar la evaluacion, todos los tests.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Evaluacion> OnFinish { get; set; }
+
+    private Test _TestActivo;
+
+    protected override Task OnInitializedAsync()
+    {
+        _TestActivo = Evaluacion.Tests.First();
+        return base.OnInitializedAsync();
+    }
+
+    private void ShowOne_OnRespuestaSeleccionada(Test test)
+    {
+        _TestActivo = NextTest();
+        if (_TestActivo == null) InvokeOnFinish();
+    }
+
+    /// <summary>
+    /// Retorna el test que sigue al actual.
+    /// </summary>
+    /// <returns></returns>
+    private Test NextTest()
+    {
+        Test testSiguinte = null;
+
+        int siguinte = _TestActivo.Numero + 1;
+
+        try
+        {
+            testSiguinte = Evaluacion.Tests.First(t => t.Numero == siguinte);
+        }catch{}
+
+        return testSiguinte;
+    }
+
+    /// <summary>
+    /// Lanza el evento cuando se finaliza el examen.
+    /// </summary>
+    private void InvokeOnFinish()
+    {
+        OnFinish.InvokeAsync(Evaluacion);
+    }
+}

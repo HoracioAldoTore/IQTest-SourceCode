@@ -1,0 +1,89 @@
+﻿@page "/IQTestPage"
+
+<ShowTime Evaluacion="Evaluacion" OnTiempoFinalizado="ShowTime_OnTiempoFinalizado">
+</ShowTime>
+
+@if(IsFinish)
+{    
+    <ShowNotas  Evaluacion="Evaluacion" 
+                OnSelectTest="ShowNotas_OnSelectTest">
+    </ShowNotas>
+}
+else if (IsShowOneTest)
+{
+    <ShowOne Test="_testActivo"
+             OnRespuestaSeleccionada="ShowOne_OnRespuestaSeleccionada">
+    </ShowOne>
+}
+else
+{
+    <ShowTests Evaluacion="Evaluacion" OnFinish="ShowTests_OnFinish"></ShowTests>
+}
+
+@code {
+    private bool IsFinish = false;
+    private bool IsShowOneTest = false;
+    private Evaluacion Evaluacion = new Evaluacion();
+    private Test _testActivo;
+
+    protected override Task OnInitializedAsync()
+    {
+        Evaluacion = new Evaluacion();
+        for (int nroTest = 1; nroTest <= 2; nroTest++)
+        {
+            string formatNroTest = nroTest.ToString("000");
+            Test test = new Test();
+            test.Evaluacion = Evaluacion;
+            test.Imagen = $"{formatNroTest}-00.png";
+            for (int i = 1; i <= 8; i++)
+            {
+                Respuesta respuesta = new Respuesta();
+                respuesta.Imagen = $"{formatNroTest}-{i.ToString("00")}.png";
+                test.Respuestas.Add(respuesta);
+            }
+            Evaluacion.Tests.Add(test);
+        }
+        SetRespuestasCorrectas();
+
+        return base.OnInitializedAsync();
+    }
+
+    private void SetRespuestasCorrectas()
+    {
+        Dictionary<int, int> correctas = new Dictionary<int, int>();
+        correctas[1] = 8;
+        correctas[2] = 1;
+
+        foreach(var corecta in correctas)
+        {
+            Test test = Evaluacion.Tests.First(t => t.Numero == corecta.Key);
+            Respuesta respuestaCorrecta = test.Respuestas.First(r => r.Numero == corecta.Value);
+            respuestaCorrecta.Correcta = true;
+        }        
+    }
+
+    private void ShowTests_OnFinish(Evaluacion evaluacion)
+    {
+        IsFinish = true; //Finalizo la evaluacion
+        Evaluacion = evaluacion;
+    }
+
+    private void ShowNotas_OnSelectTest(Test test)
+    {
+        IsFinish = false;
+        IsShowOneTest = true;
+        _testActivo = test;
+    }
+
+    private void ShowOne_OnRespuestaSeleccionada(Test test)
+    {
+        IsFinish = true;
+        IsShowOneTest = false;
+    }
+
+    private void ShowTime_OnTiempoFinalizado()
+    {
+        IsFinish = true;
+        IsShowOneTest = false;
+    }
+}

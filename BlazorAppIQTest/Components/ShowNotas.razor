@@ -1,0 +1,74 @@
+﻿<h3>@Evaluacion.GetTestsCorrectos().Count correctas de @Evaluacion.Tests.Count</h3>
+
+<table>
+        @foreach (Test test in Evaluacion.Tests)
+        {        
+        <tr>    
+            <td>
+                @test.Numero
+            </td>
+            <td>
+                @if (test.EsCorrecto || Evaluacion.TiempoEstaAgotado)
+                {
+                    @* Solo muestra el test, sin dar posibilidad de correccion *@
+                    <img style="width:40%;"
+                         src="Images/@test.Imagen?@(Guid.NewGuid())" />
+                }
+                else
+                {
+                    @* Da la posibilidad de corregir el test *@
+                    <img style="cursor:pointer; width:40%;"
+                         onload="style.border = '2px solid transparent';"
+                         onmouseenter="style.border = '2px solid orange';"
+                         onmouseleave="style.border = '2px solid transparent';"
+                         src="Images/@test.Imagen?@(Guid.NewGuid())"
+                         title="Intentelo de nuevo"
+                         @onclick="@(() => UserSelect(test))" />
+                }
+            </td>
+            <td>
+                @if (test.GetRespuestaSeleccionada() != null)
+                {
+                    <img style="width:60%;"
+                         src="Images/@test.GetRespuestaSeleccionada().Imagen?@(Guid.NewGuid())" />
+                }
+                else
+                {
+                    <img style="width:60%;"
+                         src="Images/Generales/no_resuelto.png?@(Guid.NewGuid())" />
+                }
+            </td>
+            <td>
+                @if (test.EsCorrecto)
+                {
+                    <img style="width:10%;"
+                         src="Images/Generales/Bien.png" 
+                         />
+                }
+                else
+                {
+                    <img style="width:10%;"
+                         src="Images/Generales/Mal.png"                         
+                         />
+                }
+            </td>
+        </tr>
+        }    
+</table>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Evaluacion Evaluacion { set; get; }
+
+    [Parameter]
+    public EventCallback<Test> OnSelectTest { get; set; }
+
+    private Test _Test;
+
+    private void UserSelect(Test test)
+    {
+        _Test = test;
+        OnSelectTest.InvokeAsync(test); //Lanza el evento
+    }
+}

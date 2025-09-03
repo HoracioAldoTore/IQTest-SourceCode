@@ -1,0 +1,68 @@
+﻿@using System.Timers
+@implements IDisposable
+
+<div style="color:@((Evaluacion.TiempoEstaAgotado) ? "red" : "green");">
+    Tiempo restante: @Evaluacion.TiempoRestante [hh:mm:ss]
+</div>
+
+<div class="progress" style="height:10px">
+    <div class="progress-bar" style="width:@Evaluacion.TiempoRestantePorcentual%;background-color:green;"></div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Evaluacion Evaluacion { set; get; }
+
+    /// <summary>
+    /// Evento que se dispara al finalizar TIEMPO del examen.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnTiempoFinalizado { get; set; }
+
+    private System.Timers.Timer _timer;
+
+    protected override void OnInitialized()
+    {
+        var cero = new TimeSpan(0, 0, 0);
+        if (Evaluacion.TiempoRestante > cero)
+            EnabledTimer();
+    }
+
+    private void EnabledTimer()
+    {
+        _timer = new System.Timers.Timer(1000); // Set interval to 1 second
+        _timer.Elapsed += OnIntervaloTiempo;
+        _timer.Enabled = true;
+        _timer.Start();
+    }
+
+    private async void OnIntervaloTiempo(object? sender, ElapsedEventArgs e)
+    {
+        var cero = new TimeSpan(0, 0, 0);
+        if (Evaluacion.TiempoRestante > cero)
+        {
+            TimeSpan secondsToSubtract = TimeSpan.FromSeconds(1);
+            TimeSpan tiempoRestante = Evaluacion.TiempoRestante.Subtract(secondsToSubtract);
+            Evaluacion.TiempoRestante = tiempoRestante;
+            await InvokeAsync(StateHasChanged); // Update UI on the Blazor synchronization context
+        }
+        else
+        {
+            _timer.Enabled = false;
+            //Se ha terminado el tiempo de la evaluación.
+            InvokeOnTiempoFinalizado();
+        }
+    }
+
+    private void InvokeOnTiempoFinalizado()
+    {
+        //dispara al finalizar TIEMPO del examen.
+        OnTiempoFinalizado.InvokeAsync();
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

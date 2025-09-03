@@ -1,0 +1,59 @@
+﻿<h3>@Test.Numero de 2</h3>
+<img src="Images/@Test.Imagen?@(Guid.NewGuid())" style="width:40%" />
+<table cellpadding="3" cellspacing="3">
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        @for (int i = 0; i < Test.Respuestas.Count; i++)
+        {
+            string imagen = Test.Respuestas[i].Imagen;
+            <td>
+                <img style="cursor:pointer; width:80%;"
+                     onload="style.border = '2px solid transparent';"
+                     onmouseenter="style.border = '2px solid orange';"
+                     onmouseleave="style.border = '2px solid transparent';"
+                     title="Haga clic para seleccionar su respuesta"
+                     src="Images/@imagen?@(Guid.NewGuid())"
+                     @onclick="@(() => UserSelect(imagen))" />
+            </td>
+        }
+    </tr>
+</table>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Test Test { set; get; }
+
+    public void UserSelect(string imagen)
+    {
+        //'001-01.png'
+        MarcarRespuestaSeleccionada(imagen);
+        InvokeOnRespuestaSeleccionada();
+    }
+
+    private void MarcarRespuestaSeleccionada(string imagen)
+    {
+        foreach (Respuesta respuesta in Test.Respuestas)
+        {
+            respuesta.Seleccionada = false;
+            if (respuesta.Imagen == imagen)
+            {
+                respuesta.Seleccionada = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Evento que se dispara al finalizar el examen.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Test> OnRespuestaSeleccionada { get; set; }
+
+    /// <summary>
+    /// Lanza el evento cuando se finaliza el examen.
+    /// </summary>
+    private void InvokeOnRespuestaSeleccionada()
+    {
+        OnRespuestaSeleccionada.InvokeAsync(Test);
+    }
+}

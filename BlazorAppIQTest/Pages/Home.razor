@@ -1,0 +1,34 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+<PageTitle>
+    Evaluador de IQ
+</PageTitle>
+
+<h3 style="text-align:center">
+    Bienvenido a su evaluador de <br />
+    IQ (intelligence quotient o 'cociente intelectual')
+</h3>
+<br />
+<h1 style ="text-align:center">
+    Iniciará en <b style="color:forestgreen">@Tiempo</b> segundos.
+</h1>
+
+@code{
+    private int Tiempo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        const int INICIAL = 3;
+        for (int i = INICIAL; i >= 0; i--)
+        {
+            Tiempo = i;
+            StateHasChanged(); // Actualiza la UI para mostrar el nuevo contador
+            await Task.Delay(500); // Espera X segundos
+            StateHasChanged(); // Actualiza la UI para mostrar el nuevo contador
+        }
+        
+        NavigationManager.NavigateTo("IQTestPage");
+    }
+}
+
