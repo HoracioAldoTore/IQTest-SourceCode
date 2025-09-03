@@ -3,15 +3,17 @@
 Técnicamente está escrita con lenguaje **C#**, nunca con JavaScript, 
 lo cual le otorga una confianza superior, evitando los errores de los lenguajes interpretados 
 y débiles en validación de tipo de datos como es JavaScript. 
-La aplicación es **Wasm WebAssembly** pura lo que le permite ser ejecutarse en su totalidad 
+La aplicación es **Wasm WebAssembly** pura lo que le permite ser ejecutada en su totalidad 
 en el navegador web y hosteada o alojada en un servidor web de sitios estaticos 
-como Github Pages, que es gratis no pagando un solo peso.
+como Github Pages, que es gratis, no pagando un solo centavo.
 
 *  Si desea acceder al código fuente debe ir a:
-https://github.com/HoracioAldoTore/IQTest-SourceCode
+[IQTest-SourceCode]
+(https://github.com/HoracioAldoTore/IQTest-SourceCode)
 
 * Si desea ejecutar a la aplicación podrá acceder a: 
-https://horacioaldotore.github.io/IQTest/
+[ejecutar a la aplicación]
+(https://horacioaldotore.github.io/IQTest/)
 
 Espero que le sea útil.
 
