@@ -17,7 +17,7 @@ como Github Pages, que es gratis, no pagando un solo centavo.
 Espero que le sea útil.
 
 **Escrito por:** Horacio Aldo Tore
-[Videoas:](https://www.youtube.com/@ProgramaTore)
+[Videos educativos:](https://www.youtube.com/@ProgramaTore)
 
 
 
