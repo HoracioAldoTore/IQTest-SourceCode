@@ -8,10 +8,10 @@ en el navegador web y hosteada o alojada en un servidor web de sitios estaticos
 como Github Pages, que es gratis, no pagando un solo centavo.
 
 *  Si desea acceder al código fuente debe ir a:
-[IQTest-SourceCode](https://github.com/HoracioAldoTore/IQTest-SourceCode)
+[Source Code](https://github.com/HoracioAldoTore/IQTest-SourceCode)
 
 * Si desea ejecutar a la aplicación podrá acceder a: 
-[ejecutar a la aplicación](https://horacioaldotore.github.io/IQTest/)
+[Run app](https://horacioaldotore.github.io/IQTest/)
 
 Espero que le sea útil.
 
