@@ -69,5 +69,19 @@
                 return esTiempoAgotado;
             }
         }
+
+        /// <summary>
+        /// Nota del examen, del 0 al 10.
+        /// </summary>
+        public int Nota
+        {
+            get
+            {
+                int correctos = GetTestsCorrectos().Count;
+                decimal porciento = correctos / (decimal)this.Tests.Count;
+                int nota = Convert.ToInt32(Math.Truncate(porciento * 10));
+                return nota;
+            }
+        }
     }
 }

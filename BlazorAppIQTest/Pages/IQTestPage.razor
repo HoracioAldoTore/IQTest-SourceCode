@@ -1,4 +1,5 @@
 ﻿@page "/IQTestPage"
+@inject IToastService toastService
 
 <ShowTime Evaluacion="Evaluacion" OnTiempoFinalizado="ShowTime_OnTiempoFinalizado">
 </ShowTime>
@@ -21,6 +22,7 @@ else
 }
 
 @code {
+
     private bool IsFinish = false;
     private bool IsShowOneTest = false;
     private Evaluacion Evaluacion = new Evaluacion();
@@ -48,10 +50,13 @@ else
         return base.OnInitializedAsync();
     }
 
+    /// <summary>
+    /// Establece las respuestas que son correctas para cada test.
+    /// </summary>
     private void SetRespuestasCorrectas()
     {
         Dictionary<int, int> correctas = new Dictionary<int, int>();
-        correctas[1] = 8;
+        correctas[1] = 8; //¿Como se entiende?: Para el test 1 la respuesta correcta es la 8.
         correctas[2] = 1;
 
         foreach(var corecta in correctas)
@@ -65,7 +70,8 @@ else
     private void ShowTests_OnFinish(Evaluacion evaluacion)
     {
         IsFinish = true; //Finalizo la evaluacion
-        Evaluacion = evaluacion;
+        Evaluacion = evaluacion;        
+        toastService.ShowInfo($"Su nota es un: {evaluacion.Nota}. Puede hacer clic sobre el test incorrecto para corregirlo.");
     }
 
     private void ShowNotas_OnSelectTest(Test test)
@@ -85,5 +91,7 @@ else
     {
         IsFinish = true;
         IsShowOneTest = false;
+
+        toastService.ShowInfo("El tiempo de resolución se ha agotado. Ya no puede hacer correcciones.");
     }
 }
