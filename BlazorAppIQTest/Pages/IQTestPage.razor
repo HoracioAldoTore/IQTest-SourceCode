@@ -67,11 +67,20 @@ else
         }        
     }
 
+    private void MostrarNota()
+    {
+        int nota = Evaluacion.Nota;
+        toastService.ShowInfo($"Su nota es un: {Evaluacion.Nota}");
+        bool hayAlgoMal = nota < 10;
+        if(hayAlgoMal && !Evaluacion.TiempoEstaAgotado)
+            toastService.ShowInfo($"Puede hacer clic sobre el test incorrecto para corregirlo.");
+    }
+
     private void ShowTests_OnFinish(Evaluacion evaluacion)
     {
         IsFinish = true; //Finalizo la evaluacion
-        Evaluacion = evaluacion;        
-        toastService.ShowInfo($"Su nota es un: {evaluacion.Nota}. Puede hacer clic sobre el test incorrecto para corregirlo.");
+        Evaluacion = evaluacion;
+        MostrarNota();
     }
 
     private void ShowNotas_OnSelectTest(Test test)
@@ -85,6 +94,7 @@ else
     {
         IsFinish = true;
         IsShowOneTest = false;
+        MostrarNota();
     }
 
     private void ShowTime_OnTiempoFinalizado()
@@ -92,6 +102,7 @@ else
         IsFinish = true;
         IsShowOneTest = false;
 
-        toastService.ShowInfo("El tiempo de resolución se ha agotado. Ya no puede hacer correcciones.");
+        toastService.ShowError("El tiempo de resolución se ha agotado. Ya no puede hacer correcciones.");
+        MostrarNota();
     }
 }
